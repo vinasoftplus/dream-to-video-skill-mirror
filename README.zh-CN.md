@@ -18,7 +18,7 @@
 ### 通过 skills CLI
 
 ```bash
-npx skills add mediastormDev/dream-to-video-skill -s dream-to-video
+npx skills add vinasoftplus/dream-to-video-skill-mirror -s dream-to-video
 ```
 
 ### 手动安装
@@ -26,9 +26,9 @@ npx skills add mediastormDev/dream-to-video-skill -s dream-to-video
 克隆仓库并将 skill 目录软链接到你的 agent 技能目录：
 
 ```bash
-git clone https://github.com/mediastormDev/dream-to-video-skill.git
+git clone https://github.com/vinasoftplus/dream-to-video-skill-mirror.git
 mkdir -p ~/.claude/skills
-ln -s "$(pwd)/dream-to-video-skill/skills/dream-to-video" ~/.claude/skills/dream-to-video
+ln -s "$(pwd)/dream-to-video-skill-mirror/skills/dream-to-video" ~/.claude/skills/dream-to-video
 ```
 
 ## 环境要求
@@ -49,8 +49,8 @@ ln -s "$(pwd)/dream-to-video-skill/skills/dream-to-video" ~/.claude/skills/dream
 安装技能后，克隆本仓库以获取 Python 工具链：
 
 ```bash
-git clone https://github.com/mediastormDev/dream-to-video-skill.git
-cd dream-to-video-skill/dream_to_video
+git clone https://github.com/vinasoftplus/dream-to-video-skill-mirror.git
+cd dream-to-video-skill-mirror/dream_to_video
 pip install -r requirements.txt
 playwright install chromium
 ```
@@ -91,6 +91,10 @@ Agent 会自动：
 
 - `task_XXX_YYYYMMDD_HHMMSS.mp4` — 原版视频
 - `task_XXX_YYYYMMDD_HHMMSS_elliptic-shatter.mp4` — 椭圆破碎边缘特效版
+
+## 自定义工作流
+
+本仓库可作为你自己视频生成工作流的起点。当前实现围绕梦境描述和即梦浏览器自动化构建。修改位置与建议步骤请见[自定义指南](./CUSTOMIZING.md)。提示词规则分别写在 `skills/dream-to-video/SKILL.md` 和 `dream_to_video/prompt_engine.py`，修改时请保持两处一致。
 
 ## 许可证
 

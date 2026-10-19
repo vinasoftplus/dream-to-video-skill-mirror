@@ -20,7 +20,7 @@ Dream text → AI transforms to cinematic prompt → Queue → Browser automatio
 ### Via skills CLI
 
 ```bash
-npx skills add mediastormDev/dream-to-video-skill -s dream-to-video
+npx skills add vinasoftplus/dream-to-video-skill-mirror -s dream-to-video
 ```
 
 ### Manual install
@@ -28,9 +28,9 @@ npx skills add mediastormDev/dream-to-video-skill -s dream-to-video
 Clone the repo and symlink the skill directory into your agent's skill folder:
 
 ```bash
-git clone https://github.com/mediastormDev/dream-to-video-skill.git
+git clone https://github.com/vinasoftplus/dream-to-video-skill-mirror.git
 mkdir -p ~/.claude/skills
-ln -s "$(pwd)/dream-to-video-skill/skills/dream-to-video" ~/.claude/skills/dream-to-video
+ln -s "$(pwd)/dream-to-video-skill-mirror/skills/dream-to-video" ~/.claude/skills/dream-to-video
 ```
 
 ## Requirements
@@ -51,8 +51,8 @@ ln -s "$(pwd)/dream-to-video-skill/skills/dream-to-video" ~/.claude/skills/dream
 After installing the skill, clone this repo to get the Python toolchain:
 
 ```bash
-git clone https://github.com/mediastormDev/dream-to-video-skill.git
-cd dream-to-video-skill/dream_to_video
+git clone https://github.com/vinasoftplus/dream-to-video-skill-mirror.git
+cd dream-to-video-skill-mirror/dream_to_video
 pip install -r requirements.txt
 playwright install chromium
 ```
@@ -93,6 +93,12 @@ Each task produces two video files in `dream_to_video/output/`:
 
 - `task_XXX_YYYYMMDD_HHMMSS.mp4` — Original video
 - `task_XXX_YYYYMMDD_HHMMSS_elliptic-shatter.mp4` — With shattered-glass edge effect
+
+## Customize Your Workflow
+
+This repository is a starting point for building your own video-generation workflow. The current implementation is designed around dream descriptions and the Jimeng browser interface. Start with [CUSTOMIZING.md](./CUSTOMIZING.md) for a map of the workflow, the files to change, and a safe order for making changes.
+
+The prompt rules live in both `skills/dream-to-video/SKILL.md` and `dream_to_video/prompt_engine.py`. Keep them aligned when you change prompt behavior. Platform-specific browser automation is concentrated in `dream_to_video/browser/engine.py`; queue orchestration and post-processing are in `dream_to_video/batch/worker.py`.
 
 ## License
 
