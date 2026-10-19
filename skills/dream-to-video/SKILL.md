@@ -49,6 +49,8 @@ python --version
 cd "{W}/dream_to_video" && pip install -r requirements.txt
 ```
 
+如需使用 Google Veo，在 `{W}/dream_to_video/.env` 中设置 `GEMINI_API_KEY`。可先复制 `.env.example` 为 `.env` 再编辑。Jimeng 登录凭证与 Gemini API Key 是两种独立配置。
+
 **Step 0-3：安装 Playwright 浏览器**
 ```bash
 playwright install chromium
@@ -148,6 +150,16 @@ cd "{W}/dream_to_video" && python -u main.py worker
 cd "{W}/dream_to_video" && python -u main.py status
 ```
 或读取状态文件：`{W}/dream_to_video/output/batch_state.json`
+
+### 使用 Google Veo
+
+如果用户明确指定 Veo，不要将任务加入即梦队列。使用同一条提示词直接运行单次生成命令，并等待视频下载完成：
+
+```bash
+cd "{W}/dream_to_video" && python -u main.py generate --provider veo "完整视频提示词"
+```
+
+Veo 使用 `{W}/dream_to_video/.env` 中的 `GEMINI_API_KEY`，输出保存在 `{W}/dream_to_video/output/`。单次 Veo 生成通过 Gemini Developer API 同步等待；`worker` 批量模式仍用于即梦。
 
 ---
 

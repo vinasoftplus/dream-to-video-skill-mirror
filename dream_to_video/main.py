@@ -60,8 +60,22 @@ async def cmd_verify():
         print("❌ 登录已过期或不存在，请运行: python main.py login")
 
 
-async def cmd_generate(prompt: str):
-    """生成视频"""
+async def cmd_generate(prompt: str, provider: str = "jimeng"):
+    """使用指定平台生成视频。"""
+    if provider == "veo":
+        from providers.veo import generate_video
+
+        try:
+            video_path = await generate_video(prompt)
+            print(f"\n✅ Veo 视频已保存到: {video_path}")
+        except Exception as e:
+            print(f"\n❌ Veo 生成失败: {e}")
+        return
+
+    if provider != "jimeng":
+        print(f"错误: 不支持的视频平台 '{provider}'。支持: jimeng, veo")
+        return
+
     from browser.engine import JimengBrowser
 
     print()
@@ -207,7 +221,8 @@ def show_help():
     print("  python main.py status                   查看所有任务状态")
     print()
     print("  --- 单次模式 ---")
-    print('  python main.py generate "你的提示词"     单次生成视频（同步等待）')
+    print('  python main.py generate "你的提示词"     使用即梦单次生成视频')
+    print('  python main.py generate --provider veo "你的提示词"  使用 Veo 单次生成视频')
     print()
     print("  --- 其他 ---")
     print("  python main.py serve                    启动 API 服务器（可选）")
@@ -233,12 +248,22 @@ def main():
         asyncio.run(cmd_verify())
 
     elif command == "generate":
-        if len(sys.argv) < 3:
+        args = sys.argv[2:]
+        provider = "jimeng"
+        if "--provider" in args:
+            provider_index = args.index("--provider")
+            if provider_index + 1 >= len(args):
+                print("错误: --provider 后需要指定 jimeng 或 veo")
+                return
+            provider = args[provider_index + 1].lower()
+            del args[provider_index:provider_index + 2]
+
+        if not args:
             print("错误: 请提供提示词")
-            print('用法: python main.py generate "你的提示词"')
+            print('用法: python main.py generate [--provider jimeng|veo] "你的提示词"')
             return
-        prompt = sys.argv[2]
-        asyncio.run(cmd_generate(prompt))
+        prompt = " ".join(args)
+        asyncio.run(cmd_generate(prompt, provider))
 
     elif command == "worker":
         asyncio.run(cmd_worker())

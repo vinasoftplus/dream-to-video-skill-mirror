@@ -5,6 +5,13 @@ from pathlib import Path
 
 # === 路径 ===
 BASE_DIR = Path(__file__).parent
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / ".env")
+except ImportError:
+    pass
+
 AUTH_FILE = BASE_DIR / "auth" / "auth.json"
 USER_DATA_DIR = BASE_DIR / "auth" / "browser_profile"  # 持久化浏览器配置目录
 OUTPUT_DIR = BASE_DIR / "output"
@@ -14,6 +21,11 @@ DATABASE_PATH = DATA_DIR / "dream_to_video.db"
 # === Anthropic API（Prompt 转化）===
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-20250514")
+
+# === Video generation providers ===
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+VEO_MODEL = os.environ.get("VEO_MODEL", "veo-3.1-generate-preview")
+VEO_POLL_INTERVAL = int(os.environ.get("VEO_POLL_INTERVAL", "10"))
 
 # === URL ===
 JIMENG_BASE_URL = "https://jimeng.jianying.com"

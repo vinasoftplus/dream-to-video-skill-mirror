@@ -1,6 +1,6 @@
 # Customize This Workflow
 
-This project turns a text description into a video-generation prompt, submits it through Jimeng in a browser, downloads the result, and optionally creates an effects version. Use this guide to adapt it without having to read the whole repository first.
+This project turns a text description into a video-generation prompt, submits it through Jimeng in a browser or Google Veo through the Gemini Developer API, downloads the result, and optionally creates an effects version. Use this guide to adapt it without having to read the whole repository first.
 
 ## Workflow map
 
@@ -9,7 +9,7 @@ Description
   -> agent skill instructions (`skills/dream-to-video/SKILL.md`)
   -> prompt transformation (`dream_to_video/prompt_engine.py`)
   -> task queue (`dream_to_video/batch/`)
-  -> Jimeng browser integration (`dream_to_video/browser/`)
+  -> Jimeng browser integration or Veo API integration (`dream_to_video/browser/`, `dream_to_video/providers/veo.py`)
   -> download and post-processing (`dream_to_video/batch/worker.py`, `dream_to_video/effects/`)
   -> `dream_to_video/output/`
 ```
@@ -20,7 +20,8 @@ Description
 | --- | --- | --- |
 | What the agent asks for or returns | `skills/dream-to-video/SKILL.md` | README usage examples |
 | How source descriptions become prompts | `dream_to_video/prompt_engine.py` | The prompt rules in `skills/dream-to-video/SKILL.md` |
-| Video platform, login, submission, settings, or downloads | `dream_to_video/browser/engine.py` | `dream_to_video/browser/selectors.py` and `dream_to_video/batch/worker.py` |
+| Jimeng platform, login, submission, settings, or downloads | `dream_to_video/browser/engine.py` | `dream_to_video/browser/selectors.py` and `dream_to_video/batch/worker.py` |
+| Veo model, API polling, or Veo download | `dream_to_video/providers/veo.py` | `dream_to_video/config.py`, `.env.example`, and `main.py` |
 | Queue behavior, retries, task matching, notifications | `dream_to_video/batch/worker.py` | `dream_to_video/batch/persistence.py` and `dream_to_video/models.py` |
 | Reference image selection | `dream_to_video/browser/reference_image.py` | `dream_to_video/batch/worker.py` and `dream_to_video/reference_images/` |
 | Output effects or formats | `dream_to_video/effects/` | `dream_to_video/batch/worker.py` |
@@ -36,7 +37,7 @@ Description
 
 ## Adding a different video platform
 
-The current worker imports `JimengBrowser` directly, so platform changes touch orchestration as well as browser automation. For a small experiment, implement the new platform's login, submit, monitor, and download behavior alongside the current browser engine and select it in the worker. For a long-lived multi-platform fork, first define a narrow adapter contract (for example: `login`, `submit`, `wait_for_result`, and `download`) and make the worker depend on that contract rather than Jimeng-specific methods.
+The current batch worker imports `JimengBrowser` directly. Veo is available for synchronous single-video generation with `python main.py generate --provider veo "<prompt>"`; the batch worker remains Jimeng-specific. For a long-lived multi-platform fork, define a narrow adapter contract (for example: `submit`, `wait_for_result`, and `download`) and make the worker depend on that contract rather than platform-specific methods.
 
 Keep platform settings, selectors, and authentication state separate. Avoid carrying cookies or browser profiles from one platform into another.
 

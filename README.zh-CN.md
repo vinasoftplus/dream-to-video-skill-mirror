@@ -44,6 +44,8 @@ ln -s "$(pwd)/dream-to-video-skill-mirror/skills/dream-to-video" ~/.claude/skill
 | **OpenRouter** | 任意模型 | [openrouter.ai](https://openrouter.ai/keys) |
 | **Google Gemini** | gemini-2.5-flash | [aistudio.google.com](https://aistudio.google.com/apikey) |
 
+Veo 使用 Gemini Developer API 生成视频，并复用 `GEMINI_API_KEY`。默认模型为 `veo-3.1-generate-preview`。
+
 ## 配置
 
 安装技能后，克隆本仓库以获取 Python 工具链：
@@ -51,6 +53,8 @@ ln -s "$(pwd)/dream-to-video-skill-mirror/skills/dream-to-video" ~/.claude/skill
 ```bash
 git clone https://github.com/vinasoftplus/dream-to-video-skill-mirror.git
 cd dream-to-video-skill-mirror/dream_to_video
+cp .env.example .env
+# 运行前在 .env 中填写所需的 API Key
 pip install -r requirements.txt
 playwright install chromium
 ```
@@ -84,6 +88,14 @@ Agent 会自动：
 | `python main.py status` | 查看任务进度 |
 | `python main.py generate "<提示词>"` | 单次同步生成 |
 | `python main.py serve` | 启动 FastAPI Web 服务 |
+
+若要使用 Veo 单次生成视频（而不是即梦），运行：
+
+```bash
+python main.py generate --provider veo "电影感视频提示词"
+```
+
+请先在 `dream_to_video/.env` 中设置 `GEMINI_API_KEY`。Veo 命令会等待任务完成，并将单个 MP4 保存到 `dream_to_video/output/`。批量 `worker` 命令目前仍面向即梦。
 
 ### 输出
 

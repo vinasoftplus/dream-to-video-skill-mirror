@@ -46,6 +46,8 @@ ln -s "$(pwd)/dream-to-video-skill-mirror/skills/dream-to-video" ~/.claude/skill
 | **OpenRouter** | any model | [openrouter.ai](https://openrouter.ai/keys) |
 | **Google Gemini** | gemini-2.5-flash | [aistudio.google.com](https://aistudio.google.com/apikey) |
 
+Veo generation uses the Gemini Developer API and the same `GEMINI_API_KEY`. The default Veo model is `veo-3.1-generate-preview`.
+
 ## Setup
 
 After installing the skill, clone this repo to get the Python toolchain:
@@ -53,6 +55,8 @@ After installing the skill, clone this repo to get the Python toolchain:
 ```bash
 git clone https://github.com/vinasoftplus/dream-to-video-skill-mirror.git
 cd dream-to-video-skill-mirror/dream_to_video
+cp .env.example .env
+# Add your API key(s) to .env before running the tools
 pip install -r requirements.txt
 playwright install chromium
 ```
@@ -86,6 +90,14 @@ The agent will:
 | `python main.py status` | View task progress |
 | `python main.py generate "<prompt>"` | Single synchronous generation |
 | `python main.py serve` | Start FastAPI web server |
+
+To generate a single video with Veo instead of Jimeng, run:
+
+```bash
+python main.py generate --provider veo "A cinematic video prompt"
+```
+
+Set `GEMINI_API_KEY` in `dream_to_video/.env` first. Veo generation runs synchronously and saves one MP4 in `dream_to_video/output/`. The batch `worker` command remains Jimeng-specific.
 
 ### Output
 
