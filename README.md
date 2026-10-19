@@ -46,7 +46,7 @@ ln -s "$(pwd)/dream-to-video-skill-mirror/skills/dream-to-video" ~/.claude/skill
 | **OpenRouter** | any model | [openrouter.ai](https://openrouter.ai/keys) |
 | **Google Gemini** | gemini-2.5-flash | [aistudio.google.com](https://aistudio.google.com/apikey) |
 
-Veo generation uses the Gemini Developer API and the same `GEMINI_API_KEY`. The default Veo model is `veo-3.1-generate-preview`.
+Veo generation uses the Gemini Developer API and the same `GEMINI_API_KEY`. The default Veo model is `veo-3.1-generate-preview`, which produces an 8-second video with audio.
 
 ## Setup
 

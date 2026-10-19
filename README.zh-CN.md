@@ -44,7 +44,7 @@ ln -s "$(pwd)/dream-to-video-skill-mirror/skills/dream-to-video" ~/.claude/skill
 | **OpenRouter** | 任意模型 | [openrouter.ai](https://openrouter.ai/keys) |
 | **Google Gemini** | gemini-2.5-flash | [aistudio.google.com](https://aistudio.google.com/apikey) |
 
-Veo 使用 Gemini Developer API 生成视频，并复用 `GEMINI_API_KEY`。默认模型为 `veo-3.1-generate-preview`。
+Veo 使用 Gemini Developer API 生成视频，并复用 `GEMINI_API_KEY`。默认模型为 `veo-3.1-generate-preview`，生成默认时长为 8 秒并包含音频。
 
 ## 配置
 

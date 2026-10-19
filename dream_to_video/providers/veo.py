@@ -40,7 +40,7 @@ async def generate_video(prompt: str) -> Path:
         operation = await asyncio.to_thread(
             client.models.generate_videos,
             model=VEO_MODEL,
-            prompt=prompt,
+            source=types.GenerateVideosSource(prompt=prompt),
             config=types.GenerateVideosConfig(number_of_videos=1),
         )
 
