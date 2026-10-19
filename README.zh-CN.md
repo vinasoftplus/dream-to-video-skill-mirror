@@ -1,17 +1,17 @@
 # Dream-to-Video Skill
 
-将梦境文字自动转化为电影级视频的 AI agent 技能。只需描述你的梦境，agent 会自动生成专业视频提示词、通过浏览器自动化提交到[即梦](https://jimeng.jianying.com)平台、下载成品视频并叠加后处理特效。
+将梦境文字自动转化为电影级视频的 AI agent 技能。描述梦境后，agent 会为[即梦](https://jimeng.jianying.com)浏览器流程或 Gemini Developer API 中的 Google Veo 生成专业提示词。即梦支持队列生成和后处理；Veo 支持同步单次生成视频。
 
 ## 工作原理
 
 ```
-梦境文字 → AI 转化为电影级提示词 → 任务队列 → 浏览器自动化 → 即梦平台 → 下载 → 后处理 → 视频文件
+梦境文字 → AI 转化为电影级提示词 → 即梦队列/浏览器或 Veo API → 下载 → 视频文件
 ```
 
 1. **提示词转化** — AI agent 按照 10 条严格规则（照片级写实、鱼眼镜头、无文字叠加、非言语叙事等）将梦境描述转化为详细的电影级视频提示词
 2. **队列提交** — 提示词被加入本地任务队列（SQLite + JSONL）
-3. **浏览器自动化** — 后台 Worker 通过 Playwright 驱动 Chromium 与即梦视频生成平台交互：登录、提交提示词、按需上传参考图、监控生成进度
-4. **下载与后处理** — 生成完成的视频自动下载，并叠加「椭圆破碎」边缘特效（中心清晰、边缘碎玻璃质感），同时输出原版和特效版
+3. **视频生成** — 即梦任务通过后台 Playwright Worker 执行；Veo 任务通过 Gemini Developer API 提交并轮询长时间运行的生成任务
+4. **下载与后处理** — Veo 视频直接下载到输出目录。即梦视频会下载并叠加「椭圆破碎」边缘特效，同时输出原版和特效版
 
 ## 安装
 
@@ -106,7 +106,7 @@ python main.py generate --provider veo "电影感视频提示词"
 
 ## 自定义工作流
 
-本仓库可作为你自己视频生成工作流的起点。当前实现围绕梦境描述和即梦浏览器自动化构建。修改位置与建议步骤请见[自定义指南](./CUSTOMIZING.md)。提示词规则分别写在 `skills/dream-to-video/SKILL.md` 和 `dream_to_video/prompt_engine.py`，修改时请保持两处一致。
+本仓库可作为你自己视频生成工作流的起点。当前支持即梦浏览器自动化和 Google Veo 单次同步生成。修改位置与建议步骤请见[自定义指南](./CUSTOMIZING.md)。提示词规则分别写在 `skills/dream-to-video/SKILL.md` 和 `dream_to_video/prompt_engine.py`，修改时请保持两处一致。
 
 ## 许可证
 

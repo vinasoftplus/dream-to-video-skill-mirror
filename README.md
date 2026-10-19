@@ -2,18 +2,18 @@
 
 [中文文档](./README.zh-CN.md)
 
-AI agent skill that transforms dream text into cinematic videos. Describe your dream, and the agent automatically generates professional video prompts, submits them to the [Jimeng](https://jimeng.jianying.com) platform via browser automation, downloads the finished videos, and applies post-processing effects.
+AI agent skill that transforms dream text into cinematic videos. Describe your dream, and the agent generates a professional prompt for either the [Jimeng](https://jimeng.jianying.com) browser workflow or Google Veo through the Gemini Developer API. Jimeng supports queued generation and post-processing; Veo is available for synchronous single-video generation.
 
 ## How It Works
 
 ```
-Dream text → AI transforms to cinematic prompt → Queue → Browser automation → Jimeng platform → Download → Post-processing → Video files
+Dream text → AI transforms to cinematic prompt → Jimeng queue/browser or Veo API → Download → Video files
 ```
 
 1. **Prompt transformation** — The AI agent converts your dream description into a detailed cinematic video prompt following 10 strict rules (photorealistic style, fisheye lens, no text overlays, silent narrative, etc.)
 2. **Queue submission** — The prompt is added to a local task queue (SQLite + JSONL)
-3. **Browser automation** — A background worker drives Chromium via Playwright to interact with the Jimeng video generation platform: login, submit prompts, upload reference images when needed, monitor progress
-4. **Download & post-processing** — Completed videos are downloaded and automatically processed with an "Elliptic Shatter" edge effect (center-clear, shattered-glass edges), outputting both the original and the effect version
+3. **Video generation** — Jimeng tasks use a background Playwright worker; Veo tasks use the Gemini Developer API and poll the long-running generation operation
+4. **Download & post-processing** — Veo videos download directly to the output folder. Jimeng videos are downloaded and automatically processed with an "Elliptic Shatter" edge effect, outputting both the original and effect versions
 
 ## Install
 
@@ -108,7 +108,7 @@ Each task produces two video files in `dream_to_video/output/`:
 
 ## Customize Your Workflow
 
-This repository is a starting point for building your own video-generation workflow. The current implementation is designed around dream descriptions and the Jimeng browser interface. Start with [CUSTOMIZING.md](./CUSTOMIZING.md) for a map of the workflow, the files to change, and a safe order for making changes.
+This repository is a starting point for building your own video-generation workflow. It currently supports Jimeng browser automation and synchronous single-video generation through Google Veo. Start with [CUSTOMIZING.md](./CUSTOMIZING.md) for a map of the workflow, the files to change, and a safe order for making changes.
 
 The prompt rules live in both `skills/dream-to-video/SKILL.md` and `dream_to_video/prompt_engine.py`. Keep them aligned when you change prompt behavior. Platform-specific browser automation is concentrated in `dream_to_video/browser/engine.py`; queue orchestration and post-processing are in `dream_to_video/batch/worker.py`.
 
